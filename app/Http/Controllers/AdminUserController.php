@@ -19,11 +19,13 @@ class AdminUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => "required|string|email|max:255|unique:users,email,$id",
+            'role' => 'required|in:admin,karyawan',
         ]);
 
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->role = $request->role;
 
         if ($request->filled("password")) {
             $request->validate([
@@ -50,12 +52,14 @@ class AdminUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|in:admin,karyawan',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
         ]);
 

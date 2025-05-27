@@ -21,6 +21,9 @@
       --navbar-hover: #ffffff;
       --navbar-active-bg: #ffffff;
       --navbar-active-text: #000000;
+      --rating-baik: #4CAF50;
+      --rating-sedang: #FFC107;
+      --rating-buruk: #F44336;
     }
 
     body {
@@ -84,10 +87,10 @@
         content: '';
         position: absolute;
         left: 0;
-        bottom: -5px; /* Jarak antara teks dan garis bawah */
+        bottom: -5px;
         width: 100%;
-        height: 3px; /* Ketebalan garis */
-        background-color: white; /* Warna garis bawah */
+        height: 3px;
+        background-color: white;
         border-radius: 2px;
     }
 
@@ -121,13 +124,13 @@
     }
 
     .profile-section {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     .section-title {
       font-size: 18px;
       font-weight: 500;
-      margin-top: 50px;
+      margin-top: 40px;
       margin-bottom: 15px;
       border-bottom: 1px solid #eee;
       padding-bottom: 8px;
@@ -153,21 +156,41 @@
       font-style: italic;
     }
 
-    form {
-      display: inline;
+    .review-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
+
+    .review-item {
+      border-bottom: 1px dashed #eee;
+      padding: 10px 0;
+    }
+
+    .review-item:last-child {
+      border-bottom: none;
+    }
+
+    .review-meta {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 3px;
+    }
+
+    .rating-baik { color: var(--rating-baik);}
+    .rating-sedang { color: var(--rating-sedang);}
+    .rating-buruk { color: var(--rating-buruk);}
   </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar">
-    <span class="navbar-brand">Dashboard</span>
+    <a class="navbar-brand" href="{{ route('dashboard') }}">Dashboard</a>
     <div class="navbar-actions">
       <a
         href="{{ route('profile') }}"
         class="nav-btn {{ Request::is('profile') ? 'active' : '' }}"
       >Profil Saya</a>
-
       <form action="{{ route('logout') }}" method="POST">
         @csrf
         <button type="submit" class="nav-btn">Logout</button>
@@ -183,24 +206,6 @@
       </div>
 
       <div class="profile-section">
-        <h2 class="section-title">Informasi Kinerja</h2>
-        <div class="info-item">
-          <span class="info-label">Rating:</span>
-          <span class="info-value">{{ $user->rating ?? 'Belum ada rating' }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Review:</span>
-          <span class="info-value">
-            @if ($user->review)
-              "{{ $user->review }}"
-            @else
-              <span class="no-data">Belum ada review</span>
-            @endif
-          </span>
-        </div>
-      </div>
-
-      <div class="profile-section">
         <h2 class="section-title">Informasi Akun</h2>
         <div class="info-item">
           <span class="info-label">Role:</span>
@@ -210,6 +215,29 @@
           <span class="info-label">Bergabung:</span>
           <span class="info-value">{{ $user->created_at->format('d M Y') }}</span>
         </div>
+      </div>
+
+      <div class="profile-section">
+        <h2 class="section-title">Review yang Diterima dari Kolega</h2>
+        @if($reviewsReceived->count() > 0)
+          <ul class="review-list">
+            @foreach($reviewsReceived as $review)
+              <li class="review-item">
+                <div class="review-meta">
+                  Dari: {{ $review->penilai->name }} ({{ $review->created_at->format('d M Y') }})
+                  <span class="rating-{{ $review->rating }}">| Rating: {{ ucfirst($review->rating) }}</span>
+                </div>
+                @if($review->review)
+                  <div>"{{ $review->review }}"</div>
+                @else
+                  <div class="no-data">Tidak ada review tertulis.</div>
+                @endif
+              </li>
+            @endforeach
+          </ul>
+        @else
+          <div class="no-data">Belum ada review dari kolega.</div>
+        @endif
       </div>
     </div>
   </div>

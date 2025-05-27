@@ -15,10 +15,15 @@
             --secondary-color: #666666;
             --button-bg: #000000;
             --button-text: #ffffff;
-            --button-hover: #333333;
+            --button-hover: #ffffff;
             --navbar-bg: #000000;
             --navbar-text: #ffffff;
-            --navbar-hover: #333333;
+            --navbar-hover: #ffffff;
+            --navbar-active-bg: #ffffff;
+            --navbar-active-text: #000000;
+            --rating-baik: #4CAF50;
+            --rating-sedang: #FFC107;
+            --rating-buruk: #F44336;
         }
 
         body {
@@ -29,7 +34,7 @@
             padding: 0;
         }
 
-        /* Navbar Styles */
+        /* Navbar Styles - Sama dengan profile.blade.php */
         .navbar {
             background-color: var(--navbar-bg);
             color: var(--navbar-text);
@@ -37,7 +42,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand {
@@ -45,13 +50,13 @@
             font-weight: 600;
             color: var(--navbar-text);
             text-decoration: none;
-            margin-right: auto; /* Pindahkan ke kanan */
-            padding-left: 20px; /* Beri jarak dari kiri */
+            margin-right: auto;
+            padding-left: 20px;
         }
 
         .navbar-actions {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
         }
 
@@ -63,29 +68,35 @@
             cursor: pointer;
             font-weight: 600;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
         }
 
         .nav-btn:hover {
-            color: #ddd;
-        }
-
-        .logout-btn {
-            background-color: transparent;
-            color: var(--navbar-text);
-            padding: 8px 16px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .logout-btn:hover {
             background-color: var(--navbar-hover);
-            border-color: var(--navbar-hover);
+            color: var(--primary-color);
         }
 
+        .nav-btn.active {
+            position: relative;
+        }
+
+        .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
+
+        /* Dashboard Specific Styles */
         .container {
             max-width: 1200px;
-            margin: 20px auto;
+            margin: 40px auto;
             padding: 0 20px;
         }
 
@@ -100,7 +111,6 @@
             gap: 20px;
         }
 
-        /* Card Styles with fixed height */
         .user-card {
             background-color: var(--card-color);
             border-radius: 8px;
@@ -111,6 +121,7 @@
             flex-direction: column;
             min-height: 250px;
             height: auto;
+            position: relative;
         }
 
         .user-card:hover {
@@ -145,6 +156,10 @@
             margin-bottom: 10px;
         }
 
+        .rating-baik { color: var(--rating-baik); }
+        .rating-sedang { color: var(--rating-sedang); }
+        .rating-buruk { color: var(--rating-buruk); }
+
         .review-display {
             font-size: 14px;
             line-height: 1.5;
@@ -152,24 +167,36 @@
             color: var(--secondary-color);
             flex-grow: 1;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Review Form - Absolute Positioning */
+        .review-text {
+            font-style: italic;
+            margin-bottom: 5px;
+        }
+
+        .review-meta {
+            font-size: 12px;
+            color: #999;
+        }
+
         .review-form-container {
             position: relative;
         }
 
         .review-form {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background-color: var(--card-color);
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             padding: 20px;
             z-index: 10;
             display: none;
+            width: 90%;
+            max-width: 500px;
         }
 
         .form-group {
@@ -189,14 +216,13 @@
             border: 1px solid var(--border-color);
             border-radius: 4px;
             font-family: inherit;
-            box-sizing: border-box; /* Ensure padding doesn't affect width */
+            box-sizing: border-box;
         }
 
-        /* Perbaikan margin untuk textarea */
         textarea {
             min-height: 80px;
             resize: vertical;
-            margin-right: 5px; /* Tambahkan margin kanan */
+            margin-right: 5px;
         }
 
         .submit-btn {
@@ -236,7 +262,6 @@
             font-size: 14px;
         }
 
-        /* Overlay for when form is open */
         .overlay {
             display: none;
             position: fixed;
@@ -248,20 +273,56 @@
             z-index: 5;
         }
 
-        /* Button container for better alignment */
         .button-group {
             display: flex;
             gap: 10px;
             margin-top: 10px;
         }
+
+        .alert {
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .reviews-list {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .review-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navbar - Sama persis dengan profile.blade.php -->
     <nav class="navbar">
-        <span class="navbar-brand">Dashboard</span>
+        <a class="navbar-brand" href="{{ route('dashboard') }}">Dashboard</a>
         <div class="navbar-actions">
-            <a href="{{ route('profile') }}" class="nav-btn">Profil Saya</a>
+            <a href="{{ route('profile') }}" 
+               class="nav-btn {{ Request::is('profile') ? 'active' : '' }}">
+               Profil Saya
+            </a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="nav-btn">Logout</button>
@@ -272,54 +333,128 @@
     <div class="container">
         <h2 class="page-title">Kelola Kinerja Karyawan</h2>
 
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-error">
+            {{ session('error') }}
+        </div>
+        @endif
+
         <div class="users-grid">
-            @foreach ($users as $user)
+            @foreach ($karyawanList as $karyawan)
                 <div class="review-form-container">
-                    <div class="user-card" id="user-card-{{ $user->id }}">
-                        <div class="user-name">{{ $user->name }}</div>
-                        <div class="user-email">{{ $user->email }}</div>
-                        <div class="user-role">{{ $user->role }}</div>
+                    <div class="user-card" id="user-card-{{ $karyawan->id }}">
+                        <div class="user-name">{{ $karyawan->name }}</div>
+                        <div class="user-email">{{ $karyawan->email }}</div>
+                        <div class="user-role">{{ $karyawan->role }}</div>
                         
-                        <div class="rating-display">
-                            Rating: <span id="rating-value-{{ $user->id }}">{{ $user->rating ?? 'Belum ada rating' }}</span>
-                        </div>
+                        @php
+                            $existingReview = $karyawan->reviewsReceived->where('penilai_id', Auth::id())->first();
+                        @endphp
                         
-                        <div class="review-display">
-                            @if($user->review)
-                                "{{ $user->review }}"
-                            @else
-                                <span class="no-review">Belum ada review</span>
-                            @endif
-                        </div>
+                        @if($existingReview)
+                            <div class="rating-display">
+                                Rating Anda: 
+                                <span class="rating-{{ $existingReview->rating }}">
+                                    {{ ucfirst($existingReview->rating) }}
+                                </span>
+                            </div>
+                            <div class="review-display">
+                                <div class="review-text">"{{ $existingReview->review ?? 'Tidak ada review' }}"</div>
+                                <div class="review-meta">Diberikan pada {{ $existingReview->created_at->format('d M Y') }}</div>
+                            </div>
+                        @else
+                            <div class="rating-display">
+                                Anda belum memberikan rating
+                            </div>
+                            <div class="review-display">
+                                <span class="no-review">Anda belum memberikan review</span>
+                            </div>
+                        @endif
                         
-                        <button class="edit-btn" onclick="toggleReviewForm({{ $user->id }})">
-                            {{ $user->rating ? 'Edit Review' : 'Beri Review' }}
-                        </button>
+                        @if(Auth::id() != $karyawan->id)
+                            <button class="edit-btn" onclick="toggleReviewForm({{ $karyawan->id }}, {{ $existingReview ? $existingReview->id : 'null' }})">
+                                {{ $existingReview ? 'Edit Review' : 'Beri Review' }}
+                            </button>
+                        @endif
+
+                        <!-- Reviews from others -->
+                        @if($karyawan->reviewsReceived->where('penilai_id', '!=', Auth::id())->count() > 0)
+                            <div class="reviews-list">
+                                <strong>Review dari kolega:</strong>
+                                @foreach($karyawan->reviewsReceived->where('penilai_id', '!=', Auth::id()) as $review)
+                                    <div class="review-item">
+                                        <div class="rating-{{ $review->rating }}">
+                                            {{ ucfirst($review->rating) }}
+                                        </div>
+                                        @if($review->review)
+                                            <div class="review-text">"{{ $review->review }}"</div>
+                                        @endif
+                                        <div class="review-meta">
+                                            Oleh: {{ $review->penilai->name }} ({{ $review->created_at->format('d M Y') }})
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
 
-                    <div class="review-form" id="review-form-{{ $user->id }}">
-                        <form method="POST" action="{{ route('kinerja.update', $user->id) }}">
-                            @csrf
-                            @method('PUT')
-                            <div class="form-group">
-                                <label for="rating-{{ $user->id }}">Rating</label>
-                                <select name="rating" id="rating-{{ $user->id }}" required>
-                                    <option value="">Pilih Rating</option>
-                                    <option value="baik" {{ $user->rating == 'baik' ? 'selected' : '' }}>Baik</option>
-                                    <option value="sedang" {{ $user->rating == 'sedang' ? 'selected' : '' }}>Sedang</option>
-                                    <option value="buruk" {{ $user->rating == 'buruk' ? 'selected' : '' }}>Buruk</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="review-{{ $user->id }}">Review</label>
-                                <textarea name="review" id="review-{{ $user->id }}" required>{{ $user->review ?? '' }}</textarea>
-                            </div>
-                            <div class="button-group">
-                                <button type="submit" class="submit-btn">Kirim Kinerja</button>
-                                <button type="button" class="edit-btn" onclick="toggleReviewForm({{ $user->id }})">Batal</button>
-                            </div>
-                        </form>
+                    @if(Auth::id() != $karyawan->id)
+                    <div class="review-form" id="review-form-{{ $karyawan->id }}">
+                        @if($existingReview)
+                            <!-- Form Edit -->
+                            <form method="POST" action="{{ route('review.update', ['review' => $existingReview->id]) }}" id="edit-form-{{ $karyawan->id }}">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="karyawan_id" value="{{ $karyawan->id }}">
+                                <div class="form-group">
+                                    <label for="rating-{{ $karyawan->id }}">Rating</label>
+                                    <select name="rating" id="rating-{{ $karyawan->id }}" required>
+                                        <option value="">Pilih Rating</option>
+                                        <option value="baik" {{ old('rating', $existingReview->rating) == 'baik' ? 'selected' : '' }}>Baik</option>
+                                        <option value="sedang" {{ old('rating', $existingReview->rating) == 'sedang' ? 'selected' : '' }}>Sedang</option>
+                                        <option value="buruk" {{ old('rating', $existingReview->rating) == 'buruk' ? 'selected' : '' }}>Buruk</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-{{ $karyawan->id }}">Review</label>
+                                    <textarea name="review" id="review-{{ $karyawan->id }}">{{ old('review', $existingReview->review) }}</textarea>
+                                </div>
+                                <div class="button-group">
+                                    <button type="submit" class="submit-btn">Update Review</button>
+                                    <button type="button" class="edit-btn" onclick="toggleReviewForm({{ $karyawan->id }}, {{ $existingReview->id }})">Batal</button>
+                                </div>
+                            </form>
+                        @else
+                            <!-- Form Create -->
+                            <form method="POST" action="{{ route('review.store', ['karyawan' => $karyawan->id]) }}" id="create-form-{{ $karyawan->id }}">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="rating-{{ $karyawan->id }}">Rating</label>
+                                    <select name="rating" id="rating-{{ $karyawan->id }}" required>
+                                        <option value="">Pilih Rating</option>
+                                        <option value="baik">Baik</option>
+                                        <option value="sedang">Sedang</option>
+                                        <option value="buruk">Buruk</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-{{ $karyawan->id }}">Review (opsional)</label>
+                                    <textarea name="review" id="review-{{ $karyawan->id }}"></textarea>
+                                </div>
+                                <div class="button-group">
+                                    <button type="submit" class="submit-btn">Simpan Review</button>
+                                    <button type="button" class="edit-btn" onclick="toggleReviewForm({{ $karyawan->id }}, null)">Batal</button>
+                                </div>
+                            </form>
+                        @endif
                     </div>
+                    @endif
                 </div>
             @endforeach
         </div>
@@ -328,7 +463,7 @@
     <div class="overlay" id="overlay"></div>
 
     <script>
-        function toggleReviewForm(userId) {
+        function toggleReviewForm(userId, reviewId = null) {
             const form = document.getElementById(`review-form-${userId}`);
             const overlay = document.getElementById('overlay');
             
@@ -336,7 +471,6 @@
                 form.style.display = 'none';
                 overlay.style.display = 'none';
             } else {
-                // Hide all other forms first
                 document.querySelectorAll('.review-form').forEach(f => {
                     f.style.display = 'none';
                 });
@@ -345,7 +479,6 @@
             }
         }
 
-        // Close form when clicking on overlay
         document.getElementById('overlay').addEventListener('click', function() {
             document.querySelectorAll('.review-form').forEach(f => {
                 f.style.display = 'none';
@@ -353,17 +486,24 @@
             this.style.display = 'none';
         });
 
-        // Handle form submission with fetch to stay on the same page
+        // Handle form submission for both create and edit
         document.querySelectorAll('.review-form form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
                 const formData = new FormData(this);
                 const url = this.getAttribute('action');
-                const userId = this.closest('.review-form-container').querySelector('.user-card').id.split('-')[2];
+                let method = this.querySelector('input[name="_method"]') ? 
+                            this.querySelector('input[name="_method"]').value : 'POST';
+                
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.textContent = 'Memproses...';
+                submitBtn.disabled = true;
                 
                 fetch(url, {
-                    method: 'POST',
+                    method: method,
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                         'Accept': 'application/json',
@@ -372,35 +512,32 @@
                 })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                        return response.json().then(err => { throw err; });
                     }
                     return response.json();
                 })
                 .then(data => {
                     if (data.success) {
-                        // Update the displayed rating and review
-                        document.getElementById(`rating-value-${userId}`).textContent = 
-                            data.rating || 'Belum ada rating';
-                        
-                        const reviewDisplay = document.querySelector(`#user-card-${userId} .review-display`);
-                        if (data.review) {
-                            reviewDisplay.innerHTML = `"${data.review}"`;
-                        } else {
-                            reviewDisplay.innerHTML = '<span class="no-review">Belum ada review</span>';
-                        }
-                        
-                        // Hide the form and overlay
-                        document.getElementById(`review-form-${userId}`).style.display = 'none';
+                        // Close the form
+                        const formContainer = this.closest('.review-form');
+                        formContainer.style.display = 'none';
                         document.getElementById('overlay').style.display = 'none';
                         
-                        // Update button text
-                        const button = document.querySelector(`#user-card-${userId} .edit-btn`);
-                        button.textContent = data.rating ? 'Edit Review' : 'Beri Review';
+                        // Show success message
+                        alert(data.message);
+                        
+                        // Reload the page to reflect changes
+                        window.location.reload();
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Terjadi kesalahan saat menyimpan data');
+                    alert(error.error || 'Terjadi kesalahan saat menyimpan data');
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.disabled = false;
                 });
             });
         });

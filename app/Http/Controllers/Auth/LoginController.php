@@ -21,7 +21,11 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            return redirect('/dashboard'); // Ganti dengan halaman setelah login
+            $user = Auth::user();
+            if ($user->role === 'admin') {
+                return redirect('/admin');
+            }
+            return redirect('/dashboard');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials']);

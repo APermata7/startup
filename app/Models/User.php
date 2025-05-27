@@ -22,8 +22,6 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'review',
-        'rating',
     ];
 
     /**
@@ -47,5 +45,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Kinerja::class, 'penilai_id');
+    }
+    
+    // Review yang diterima user ini dari orang lain
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Kinerja::class, 'dinilai_id');
     }
 }

@@ -23,14 +23,8 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 container mx-auto px-6 py-12 grid md:grid-cols-2 gap-10 items-center">
-        <!-- Image -->
-        <div class="flex justify-center">
-            <img src="{{ asset('img/system.png') }}" alt="System Illustration" class="w-64 grayscale">
-        </div>
-
-        <!-- Text Content -->
-        <div>
+    <main class="flex-1 container mx-auto px-6 py-12 flex flex-col items-center justify-center">
+        <div class="w-full md:w-2/3 text-center">
             <h2 class="text-3xl font-bold mb-4">Selamat Datang di Employee Performance System</h2>
             <p class="text-lg mb-6">Sistem internal untuk mengelola data pegawai dan laporan kinerja.</p>
             <p class="text-gray-600 italic">"Efisien. Transparan. Terstruktur."</p>
