@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>SILKP Login</title>
+    <title>Login</title>
     <style>
         * {
             margin: 0;
